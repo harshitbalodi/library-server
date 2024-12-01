@@ -1,9 +1,14 @@
 import { configDotenv } from "dotenv";
-import app from "./src/app.js";
+import { app, sequelize } from "./src/app.js";
+
 configDotenv();
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
-app.listen(3000, () => {
-	console.log(`Server is running on  http:localhost:${port}`);
-});	
+sequelize.sync({ force: false }).then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}).catch((err) => {
+    console.error('Unable to start the server:', err);
+});
