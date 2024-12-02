@@ -1,9 +1,28 @@
 -- Users Table
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id CHAR(36) PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255),
+    auth_provider ENUM('local', 'google', 'github') DEFAULT 'local',
+    external_id VARCHAR(255),
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    is_active BOOLEAN DEFAULT TRUE,
+    last_login TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Hall Administrators Table
+CREATE TABLE hall_administrators (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id CHAR(36) NOT NULL,
+    hall_id INT NOT NULL,
+    role ENUM('ADMIN', 'MANAGER', 'VIEWER') DEFAULT 'VIEWER',
+    assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (hall_id) REFERENCES halls(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_hall (user_id, hall_id)
 );
 
 -- Halls Table
