@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../config/db";
+import sequelize from "../config/db.js";
 import bcrypt from "bcryptjs";
 
 const User = sequelize.define('User', {
@@ -50,6 +50,11 @@ const User = sequelize.define('User', {
     lastLogin: {
         type: DataTypes.DATE,
         allowNull: true
+    },
+    createdAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
     }
 }, {
     hooks: {
@@ -66,6 +71,7 @@ const User = sequelize.define('User', {
             }
         },
     },
+    timestamps: false
 });
 
 User.prototype.validatePassword = async function (password) {
