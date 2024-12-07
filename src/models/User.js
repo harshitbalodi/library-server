@@ -51,14 +51,14 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE,
         allowNull: true
     },
-    createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: false
-    }
+    // createdAt: {
+    //     type: DataTypes.DATE,
+    //     defaultValue: DataTypes.NOW,
+    //     allowNull: false
+    // }
 }, {
     hooks: {
-        beforeCreate: async (user) => {
+     beforeCreate: async (user) => {
             if (user.authProvider === 'local' && user.password) {
                 const salt = await bcrypt.genSalt(10);
                 user.password = await bcrypt.hash(user.password, salt);
@@ -71,7 +71,7 @@ const User = sequelize.define('User', {
             }
         },
     },
-    timestamps: false
+    timestamps: true
 });
 
 User.prototype.validatePassword = async function (password) {
